@@ -1,0 +1,96 @@
+.card {
+  position: relative;
+  background-color: #222222;
+  border-radius: 6px;
+}
+
+.card__image {
+  border-radius: 6px 6px 0 0;
+  box-sizing: border-box;
+  display: block;
+  width: 364px;
+  height: 203px;
+  background: #000000;
+}
+
+.card__description {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  grid-template-areas: ".card__title .card__button"
+  ".card__duration .";
+  gap: 17px 12px;
+  align-items: center;
+  margin: 16px;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.card__button {
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border: none;
+  outline: 0;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-position: 50%;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card__button:hover {
+  opacity: 0.8;
+}
+
+.card__button_like-inactive {
+  background-image: url('../../images/like-button.svg');
+}
+
+.card__button_like-active {
+  background-image: url('../../images/like-button-active.svg');
+}
+
+.card__duration {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 400;
+  color: #8B8B8B;
+}
+
+@media (max-width: 768px) {
+  .card__image {
+    width: 339px;
+    height: 190px;
+  }
+
+  .card__description {
+    grid-template-columns: 260px 1fr;
+    gap: 15px 21px;
+    margin: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .card__image {
+    width: 300px;
+    height: 168px;
+  }
+
+  .card__description {
+    grid-template-columns: 240px 1fr;
+    gap: 14px 6px;
+    margin-right: 10px;
+  }
+
+  .card__title {
+    font-size: 12px;
+  }
+
+  .card__duration {
+    font-size: 10px;
+  }
+}

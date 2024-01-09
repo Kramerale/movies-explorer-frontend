@@ -1,0 +1,148 @@
+.about-project {
+  padding: 110px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.about-project__heading {
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  padding: 0 0 23px;
+  margin: 0 0 70px;
+  border-bottom: 1px solid #DADADA;
+}
+
+.about-project__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.about-project__container:first-of-type {
+  margin-bottom: 110px;
+}
+
+.about-project__info {
+  max-width: 550px;
+}
+
+.about-project__info-title {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  margin: 0 auto 26px;
+}
+
+.about-project__info-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+}
+
+.about-project__chronology {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-project__chronology:first-of-type {
+  width: 30%;
+}
+
+.about-project__chronology:last-of-type {
+  width: 70%;
+}
+
+.about-project__chronology-line {
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 9px 0;
+  background-color: #303030;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.about-project__chronology-line_green {
+  background-color: #3DDC84;
+  color: #000000;
+}
+
+.about-project__chronology-text {
+  margin: 0;
+  color: #8B8B8B;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+}
+
+@media (max-width: 768px) {
+  .about-project {
+    padding: 90px 50px;
+  }
+
+  .about-project__container:first-of-type {
+    margin-bottom: 93px;
+  }
+
+  .about-project__info {
+    max-width: 319px;
+  }
+
+  .about-project__info-title {
+    margin-bottom: 22px;
+  }
+
+  .about-project__info-text {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+@media (max-width: 320px) {
+  .about-project {
+    padding: 70px 18px 69px;
+  }
+
+  .about-project__heading {
+    font-size: 18px;
+    padding-bottom: 28px;
+    margin-bottom: 60px;
+  }
+
+  .about-project__container:first-of-type {
+    flex-direction: column;
+    gap: 56px;
+    margin-bottom: 60px;
+  }
+
+  .about-project__info {
+    max-width: 284px;
+  }
+
+  .about-project__info-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .about-project__info-text {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-project__chronology-line {
+    font-size: 11px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    margin-bottom: 10px;
+  }
+
+  .about-project__chronology-text {
+    font-size: 11px;
+  }
+}
