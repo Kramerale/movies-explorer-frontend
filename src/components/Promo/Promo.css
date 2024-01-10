@@ -14,7 +14,7 @@
 }
 
 .promo__heading {
-  width: 730px;
+  max-width: 730px;
   text-align: center;
   font-size: 50px;
   font-weight: 400;

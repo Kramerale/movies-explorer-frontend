@@ -11,8 +11,8 @@ function Navigation ({isLoggedIn}) {
 
   if (isLoggedIn) {
     return (
-      <>
-        <nav className={`navigation ${isMenuOpen ? "navigation_active" : ""}`}>
+      <nav  className={`navigation ${!isMenuOpen ? "navigation_active" : ""}`}>
+        <div  className={`navigation__container ${isMenuOpen ? "navigation__container_active" : ""}`}r>
           <ul className="navigation__list">
             <li className="navigation__item">
               <Link className="navigation__link" to="/" onClick={toggleMenu}>Главная</Link>
@@ -28,17 +28,17 @@ function Navigation ({isLoggedIn}) {
             <p className="navigation__acc-link-title">Аккаунт</p>
             <div className="navigation__acc-link-icon"></div>
           </Link>
-        </nav>
+        </div>
         <div className={`navigation__menu-button ${!isMenuOpen ? "navigation__menu-button_active" : ""}`} onClick={toggleMenu}>
           <span></span>
         </div>
-      </>
+      </nav>
     );
   } else {
     return (
-      <nav className="navigation__auth">
-        <Link className="navigation__auth-link" to="/signup">Регистрация</Link>
-        <Link className="navigation__auth-link navigation__auth-link_type_button" to="/signin">Войти</Link>
+      <nav className="navigation-auth">
+        <Link className="navigation-auth__link" to="/signup">Регистрация</Link>
+        <Link className="navigation-auth__link navigation-auth__link_type_button" to="/signin">Войти</Link>
       </nav>
     );
   }

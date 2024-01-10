@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 70px 442px;
+  padding: 70px 0;
   margin: 0 auto;
 }
 
@@ -111,14 +111,16 @@
 
 @media (max-width: 768px) {
   .login {
-    padding: 232px 186px;
+    padding-top: 232px;
+    padding-bottom: 232px;
   }
 }
 
 @media (max-width: 500px) {
   .login {
     max-width: 260px;
-    padding: 56px 30px;
+    padding-top: 56px;
+    padding-bottom: 30px;
   }
 
   .login__logo-link {

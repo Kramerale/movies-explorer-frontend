@@ -2,9 +2,12 @@
 
 .navigation {
   width: 100%;
+  margin-left: 45px;
+}
+
+.navigation__container {
   display: flex;
   justify-content: space-between;
-  margin-left: 45px;
 }
 
 .navigation__list {
@@ -83,19 +86,33 @@
 
 @media (max-width: 768px) {
   .navigation {
+    width: 0;
     margin: 0;
     position: fixed;
     top: 0;
     right: 0;
-    flex-direction: column;
-    width: 520px;
     height: 100%;
-    background-color: #202020;
-    transition: transform 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
     z-index: 1;
   }
 
   .navigation_active {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .navigation__container {
+    position: fixed;
+    width: 520px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: #202020;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .navigation__container_active {
     transform: translateX(100%);
   }
 
@@ -127,7 +144,9 @@
   }
 
   .navigation__menu-button {
-    position: relative;
+    position: fixed;
+    top: 15px;
+    right: 30px;
     display: block;
     width: 24px;
     height: 24px;
@@ -183,7 +202,7 @@
 }
 
 @media (max-width: 520px) {
-  .navigation {
+  .navigation__container {
     width: 320px;
   }
 
@@ -197,9 +216,9 @@
 }
 
 @media (max-width: 320px) {
-  .navigation {
+  /* .navigation__container {
     width: 320px;
-  }
+  } */
 
   .navigation__acc-link {
     padding-bottom: 46px;
@@ -208,13 +227,13 @@
 
 /*Стили для навигации не авторизованным юзером*/
 
-.navigation__auth {
+.navigation-auth {
   display: flex;
   align-items: center;
   gap: 30px;
 }
 
-.navigation__auth-link {
+.navigation-auth__link {
   text-decoration: none;
   color: #FFFFFF;
   font-size: 12px;
@@ -223,11 +242,11 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-.navigation__auth-link:hover {
+.navigation-auth__link:hover {
   opacity: 0.7;
 }
 
-.navigation__auth-link_type_button {
+.navigation-auth__link_type_button {
   padding: 8px 20px;
   border: none;
   border-radius: 3px;
@@ -236,20 +255,20 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-.navigation__auth-link_type_button:hover {
+.navigation-auth__link_type_button:hover {
   opacity: 0.8;
 }
 
 @media (max-width: 320px) {
-  .navigation__auth {
+  .navigation-auth {
     gap: 14px;
   }
 
-  .navigation__auth-link {
+  .navigation-auth__link {
     font-size: 10px;
   }
 
-  .navigation__auth-link_type_button {
+  .navigation-auth__link_type_button {
     padding: 5px 12px;
   }
 }
