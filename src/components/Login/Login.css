@@ -1,0 +1,154 @@
+.login {
+  max-width: 396px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 0;
+  margin: 0 auto;
+}
+
+.login__logo-link {
+  margin-bottom: 40px;
+  align-self: flex-start;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.login__logo-link:hover {
+  opacity: 0.8;
+}
+
+.login__logo-img {
+  width: 38px;
+  height: 38px;
+}
+
+.login__heading {
+  margin: 0 0 40px;
+  font-size: 24px;
+  font-weight: 500;
+  align-self: flex-start;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  max-width: 396px;
+  width: 100%;
+}
+
+.login__label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.login__label:last-of-type {
+  margin-bottom: 179px;
+}
+
+.login__input-title {
+  margin: 0 0 10px;
+  font-size: 10px;
+  font-weight: 400;
+  color: #8B8B8B;
+}
+
+.login__input {
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2F2F2F;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.login__input_error {
+  color: #EE3465;
+}
+
+.login__error {
+  color: #EE3465;
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+.login__form-submit {
+  padding: 13px 0 15px;
+  border: none;
+  border-radius: 3px;
+  background-color: #4285F4;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.login__form-submit:hover {
+  opacity: 0.8;
+}
+
+.login__text {
+  margin: 16px 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #8B8B8B;
+}
+
+.login__link {
+  color: #4285F4;
+  text-decoration: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.login__link:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .login {
+    padding-top: 232px;
+    padding-bottom: 232px;
+  }
+}
+
+@media (max-width: 500px) {
+  .login {
+    max-width: 260px;
+    padding-top: 56px;
+    padding-bottom: 30px;
+  }
+
+  .login__logo-link {
+    margin-bottom: 50px;
+    align-self: center;
+  }
+
+  .login__heading {
+    margin-bottom: 80px;
+    align-self: center;
+  }
+
+  .login__form {
+    max-width: 260px;
+  }
+
+  .login__label:last-of-type {
+    margin-bottom: 267px;
+  }
+
+  .login__form-submit {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 12px;
+  }
+
+  .login__text {
+    margin-top: 14px;
+    font-size: 12px;
+  }
+}

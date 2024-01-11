@@ -1,0 +1,32 @@
+.header {
+  padding: 18px 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__logo-link {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.header__logo-link:hover {
+  opacity: 0.8;
+}
+
+.header_type_main {
+  background-color: #073042;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (max-width: 400px) {
+  .header {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}

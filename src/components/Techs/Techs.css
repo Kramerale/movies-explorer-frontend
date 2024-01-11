@@ -1,0 +1,134 @@
+.technologies {
+  padding: 100px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  background-color: #272727;
+}
+
+.technologies__heading {
+  padding: 0 0 23px;
+  margin: 0 0 90px;
+  border-bottom: 1px solid #DADADA;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.technologies__title {
+  margin: 0 auto 26px;
+  font-size: 50px;
+  font-weight: 400;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+}
+
+.technologies__text {
+  max-width: 460px;
+  text-align: center;
+  margin: 0 auto 100px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+}
+
+.technologies__list {
+  max-width: 690px;
+  padding: 0;
+  margin: 0 auto;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 90px);
+  gap: 10px;
+}
+
+.technologies__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  text-align: center;
+  background-color: #303030;
+  border-radius: 10px;
+}
+
+@media (max-width: 840px) {
+  .technologies {
+    padding: 90px 50px;
+  }
+
+  .technologies__list {
+    max-width: 648px;
+    grid-template-columns: repeat(auto-fit, 84px);
+  }
+}
+
+@media (max-width: 768px) {
+  /* .technologies {
+    padding: 90px 50px;
+  } */
+
+  .technologies__heading {
+    margin-bottom: 80px;
+  }
+
+  .technologies__title {
+    margin-bottom: 22px;
+  }
+
+  .technologies__text {
+    margin-bottom: 83px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  /* .technologies__list {
+    max-width: 648px;
+    grid-template-columns: repeat(auto-fit, 84px);
+  } */
+
+  .technologies__item {
+    height: 57px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 750px) {
+  .technologies__list {
+    max-width: 178px;
+  }
+}
+
+@media (max-width: 380px) {
+  .technologies {
+    padding: 70px 18px;
+  }
+
+  .technologies__heading {
+    padding-bottom: 28px;
+    margin-bottom: 60px;
+    font-size: 18px;
+  }
+
+  .technologies__title {
+    margin-bottom: 24px;
+    font-size: 30px;
+  }
+
+  .technologies__text {
+    max-width: 292px;
+    margin-bottom: 50px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  /* .technologies__list {
+    max-width: 178px;
+  } */
+}
