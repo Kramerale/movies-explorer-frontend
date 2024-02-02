@@ -12,7 +12,7 @@ function Navigation ({isLoggedIn}) {
   if (isLoggedIn) {
     return (
       <nav  className={`navigation ${!isMenuOpen ? "navigation_active" : ""}`}>
-        <div  className={`navigation__container ${isMenuOpen ? "navigation__container_active" : ""}`}r>
+        <div  className={`navigation__container ${isMenuOpen ? "navigation__container_active" : ""}`}>
           <ul className="navigation__list">
             <li className="navigation__item">
               <Link className="navigation__link" to="/" onClick={toggleMenu}>Главная</Link>

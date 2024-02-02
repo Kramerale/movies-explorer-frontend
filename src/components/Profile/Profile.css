@@ -15,6 +15,32 @@
   font-weight: 500;
 }
 
+.profile__columns {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin-bottom: 220px;
+}
+
+.profile__rows {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #424242;
+}
+
+.profile__rows:last-of-type {
+  border: none;
+}
+
+.profile__info {
+  margin: 0;
+  padding-bottom: 17px;
+  font-size: 11px;
+  font-weight: 400;
+}
+
 .profile__form {
   display: flex;
   flex-direction: column;
@@ -23,9 +49,10 @@
 }
 
 .profile__label {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: ".profile__title .profile__input"
+  ".profile__message-container .";
   margin-bottom: 17px;
   border-bottom: 1px solid #424242;
 }
@@ -35,14 +62,13 @@
   border-bottom: none;
 }
 
-.profile__input-title {
+.profile__title {
   margin: 0;
   font-size: 11px;
   font-weight: 500;
 }
 
 .profile__input {
-  padding: 0 0 16px;
   border: none;
   background-color: transparent;
   color: #FFFFFF;
@@ -51,7 +77,27 @@
   text-align: end;
 }
 
-.profile__form-submit {
+.profile__input_error {
+  color: #EE3465;
+}
+
+.profile__message-container {
+  height: 35px;
+}
+
+.profile__error-text {
+  color: #EE3465;
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+.profile__error-text_about-request {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile__edit-button {
   padding: 0;
   margin: 0 0 16px;
   border: none;
@@ -63,8 +109,31 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-.profile__form-submit:hover {
+.profile__edit-button:hover {
+  opacity: 0.7;
+}
+
+.profile__submit-button {
+  padding: 13px 0 15px;
+  width: 100%;
+  border: none;
+  border-radius: 3px;
+  background-color: #4285F4;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.profile__submit-button:hover {
   opacity: 0.8;
+}
+
+.profile__submit-button_disabled {
+  cursor: default;
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+  pointer-events: none;
 }
 
 .profile__signout-link {
@@ -90,6 +159,10 @@
     margin-bottom: 96px;
   }
 
+  .profile__columns {
+    margin-bottom: 210px;
+  }
+
   .profile__label:last-of-type {
     margin-bottom: 210px;
   }
@@ -108,6 +181,14 @@
 
   .profile__form {
     max-width: 260px;
+  }
+
+  .profile__columns {
+    margin-bottom: 379px;
+  }
+
+  .profile__label {
+    grid-template-columns: 130px 1fr;
   }
 
   .profile__label:last-of-type {

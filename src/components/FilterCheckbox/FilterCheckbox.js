@@ -1,13 +1,13 @@
 import React from 'react';
 import './FilterCheckbox.css';
 
-function FilterCheckbox () {
+function FilterCheckbox ({ tumblerState, tumblerChange }) {
 
   return (
     <div className="checkbox">
       <p className="checkbox__title">Короткометражки</p>
       <label className="checkbox__switch">
-        <input className="checkbox__input" type="checkbox"/>
+        <input className="checkbox__input" type="checkbox" checked={tumblerState} onChange={tumblerChange}/>
         <span className="checkbox__slider"></span>
       </label>
     </div>
