@@ -3,7 +3,6 @@ import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import moviesApi from '../../utils/MoviesApi';
-import mainApiApi from '../../utils/MainApi';
 import mainApi from '../../utils/MainApi';
 
 function Movies () {

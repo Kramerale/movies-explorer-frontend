@@ -14,10 +14,14 @@ import Login from '../Login/Login';
 import Register from '../Register/Register';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
+// import InfoPopup from '../InfoPopup/InfoPopup';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setLoggedIn] = useState(false);
+  // const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  // const [infoImage, setInfoImage] = React.useState("");
+  // const [infoAriaLabel, setAriaLabel] = React.useState("");
   const [errMessage, setErrMessage] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
 
@@ -177,6 +181,7 @@ function App() {
           <NotFound />
         } />
       </Routes>
+      {/* <InfoPopup/> */}
     </CurrentUserContext.Provider>
   );
 }
