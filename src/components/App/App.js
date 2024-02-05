@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import mainApi from '../../utils/MainApi';
-// import moviesApi from '../../utils/MoviesApi';
+import moviesApi from '../../utils/MoviesApi';
 import './App.css';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -14,20 +14,18 @@ import Login from '../Login/Login';
 import Register from '../Register/Register';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-// import InfoPopup from '../InfoPopup/InfoPopup';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setLoggedIn] = useState(false);
-  // const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-  // const [infoImage, setInfoImage] = React.useState("");
-  // const [infoAriaLabel, setAriaLabel] = React.useState("");
   const [errMessage, setErrMessage] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
+  const [movies, setMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
 
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       mainApi.getToken(jwt)
@@ -35,6 +33,8 @@ function App() {
         if (data) {
           setLoggedIn(true);
           navigate('/');
+          console.log(data);
+          console.log(isLoggedIn);
         } else {
           setLoggedIn(false);
         }
@@ -46,16 +46,36 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    moviesApi.getAllMovies()
+    .then(data => {
+      setMovies(data);
+    })
+    .catch(err => {
+      setErrMessage(err.message);
+    })
+  }, [isLoggedIn])
+
+  useEffect(() => {
+    mainApi.getUserMovies()
+    .then(data => {
+      setSavedMovies(data);
+    })
+    .catch(err => {
+      setErrMessage(err.message);
+    })
+  }, [isLoggedIn])
+
   function handleRegisterSubmit (name, email, password) {
     mainApi.register(name, email, password)
     .then(() => {
-      console.log('Вы зарегистрировались!');
       navigate('/signin');
     })
     .catch(err => {
       setErrMessage(err.message);
       navigate('/signup');
     })
+    // .finally(handleInfoPopup)
   }
 
   function handleLoginSubmit (email, password) {
@@ -69,9 +89,10 @@ function App() {
       setErrMessage(err.message);
       navigate('/signin');
     })
+    // .finally(() => setErrMessage(''));
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoggedIn) {
       mainApi.getUserInfo()
       .then(res => {
@@ -91,6 +112,10 @@ function App() {
     .catch(err => {
       setErrMessage(err.message);
     })
+    // .finally(() => {
+    //   setInfoMessage('');
+    //   setErrMessage('');
+    // });
   }
 
   function signOut () {
@@ -126,6 +151,7 @@ function App() {
             <ProtectedRoute
               element={Movies}
               isLoggedIn={isLoggedIn}
+              movies={movies}
             />
             <Footer />
           </>
@@ -140,6 +166,7 @@ function App() {
             <ProtectedRoute
               element={SavedMovies}
               isLoggedIn={isLoggedIn}
+              savedMovies={savedMovies}
             />
             <Footer />
           </>
@@ -153,7 +180,6 @@ function App() {
             />
             <ProtectedRoute
               element={Profile}
-              currentUser={currentUser}
               isLoggedIn={isLoggedIn}
               signOut={signOut}
               errMessage={errMessage}
@@ -181,7 +207,6 @@ function App() {
           <NotFound />
         } />
       </Routes>
-      {/* <InfoPopup/> */}
     </CurrentUserContext.Provider>
   );
 }

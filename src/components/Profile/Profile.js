@@ -1,27 +1,30 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 import './Profile.css';
+import {CurrentUserContext} from '../../contexts/CurrentUserContext';
+import {useFormWithValidation} from '../../hooks/useFormWithValidation';
 
-function Profile ({ signOut, currentUser, handleEditUserInfo, errMessage, infoMessage }) {
-  //при сабмите изменений не забыть поменять данный стейт на false
+function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage }) {
   const [isEditButtonOn, setEditButtonOn] = useState(false);
+  const [formChanged, setFormChanged] = useState();
 
-  const {
-    register,
-    formState: {errors, isValid},
-    handleSubmit,
-    reset,
-  } = useForm({
-    mode: "onChange"
-  });
+  const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
 
-  function onSubmit (data) {
-    //alert(JSON.stringify(data));
-    handleEditUserInfo(data.name, data.email);
-    setEditButtonOn(false);
-    reset();
+  const currentUser = useContext(CurrentUserContext);
+
+  function handleSubmit (e) {
+    e.preventDefault();
+    handleEditUserInfo(values.name, values.email);
+    resetForm();
+    setFormChanged(false);
   }
+
+  useEffect(() => {
+    const isFormChanged =
+      values.name !== currentUser.name || values.email !== currentUser.email;
+    setFormChanged(isFormChanged);
+  }, [currentUser, values]);
 
   if (isEditButtonOn === false) {
     return (
@@ -37,7 +40,7 @@ function Profile ({ signOut, currentUser, handleEditUserInfo, errMessage, infoMe
             <p className="profile__info">{currentUser.email}</p>
           </div>
         </div>
-        <button className="profile__edit-button" type="button" onClick={() => setEditButtonOn(true)}>Редактировать</button>
+        <button className="profile__edit-button" type="button" onClick={() => setEditButtonOn(!isEditButtonOn)}>Редактировать</button>
         <Link
           to="/"
           className="profile__signout-link"
@@ -49,90 +52,52 @@ function Profile ({ signOut, currentUser, handleEditUserInfo, errMessage, infoMe
     return (
       <section className="profile">
         <h2 className="profile__heading">Привет, {currentUser.name}!</h2>
-        <form className="profile__form" onSubmit={handleSubmit(onSubmit)}>
-        <label className="profile__label">
-          <p className="profile__title">Имя</p>
-          <input
-            {...register("name", {
-              required: "Поле обязательно для заполнения",
-              minLength: {
-                value: 2,
-                message: "Минимальная длина поля - 2 символа"
-              },
-              maxLength: {
-                value: 30,
-                message: "Максимальная длина поля - 30 символов"
-              },
-              pattern: {
-                value: /^[a-zA-Zа-яА-ЯёЁ\s\-]+$/,
-                message: "Некорректное имя"
-              }
-            })}
-            className={`profile__input ${errors?.name? "profile__input_error" : ""}`}
-            type="text"
-            placeholder="Имя"
-            defaultValue={currentUser.name}
-          />
-          <div className="profile__message-container">{errors?.name && <span className="profile__error-text">{errors?.name?.message || "Что-то пошло не так..."}</span>}</div>
-        </label>
-        <label className="profile__label">
-          <p className="profile__title">E-mail</p>
-          <input
-            {...register("email", {
-              required: "Поле обязательно для заполнения",
-              pattern: {
-                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: "Некорректный email"
-              }
-            })}
-            className="profile__input"
-            type="email"
-            placeholder="pochta@yandex.ru"
-            defaultValue={currentUser.email}
-          />
-          <div className="profile__message-container">{errors?.email && <span className="profile__error-text">{errors?.email?.message || "Что-то пошло не так..."}</span>}</div>
-        </label>
-        {/* {errMessage?
-        <div className="profile__message-container"><span className="profile__error-text profile__error-text_about-request">{errMessage}</span></div>
-        :
-        <div className="profile__message-container"><span className="profile__error-text profile__error-text_about-request">{infoMessage}</span></div>
-        } */}
-        <div className="profile__message-container"><span className="profile__error-text profile__error-text_about-request">{errMessage}</span></div>
-        <button className={`profile__submit-button ${isValid ? "" : "profile__submit-button_disabled"}`} type="submit">Редактировать</button>
+        <form className="profile__form" onSubmit={handleSubmit}>
+          <label className="profile__label">
+            <p className="profile__title">Имя</p>
+            <input
+              className={`profile__input ${errors.name ? "profile__input_error" : ""}`}
+              name="name"
+              type="text"
+              placeholder="Имя"
+              defaultValue={currentUser.name}
+              value={values.name}
+              onChange={handleChange}
+              // pattern='/^[a-zA-Zа-яА-ЯёЁ\s\-]+$/'
+              required
+            />
+            <div className="profile__message-container"><span className="profile__error-text">{errors.name}</span></div>
+          </label>
+          <label className="profile__label">
+            <p className="profile__title">E-mail</p>
+            <input
+              className={`profile__input ${errors.email ? "profile__input_error" : ""}`}
+              name="email"
+              type="email"
+              placeholder="pochta@yandex.ru"
+              defaultValue={currentUser.email}
+              value={values.email}
+              onChange={handleChange}
+              pattern='/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|\(".+"\))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+              required
+            />
+            <div className="profile__message-container"><span className="profile__error-text">{errors.email}</span></div>
+          </label>
+          <div className="profile__message-container">
+            {errMessage?
+              <span className="profile__error-text profile__error-text_about-request">{errMessage}</span>
+              : <span className="profile__error-text profile__error-text_about-request-success">{infoMessage}</span>
+            }
+          </div>
+          <button
+            className={`profile__submit-button ${isValid && formChanged ? "" : "profile__submit-button_disabled"}`}
+            type="submit"
+            disabled={!isValid || !formChanged}
+            >
+              Редактировать
+          </button>
         </form>
       </section>
-
-      // <section className="profile">
-      //   <h2 className="profile__heading">Привет, {currentUser.name}!</h2>
-      //   <form className="profile__form">
-      //     <label className="profile__label">
-      //       <p className="profile__title">Имя</p>
-      //       <input
-      //         className="profile__input"
-      //         name="name"
-      //         type="text"
-      //         placeholder="Имя"
-      //         value={currentUser.name}
-      //         required
-      //       />
-      //       <span className="profile__error"></span>
-      //     </label>
-      //     <label className="profile__label">
-      //       <p className="profile__title">E-mail</p>
-      //       <input
-      //         className="profile__input"
-      //         name="email"
-      //         type="email"
-      //         placeholder="pochta@yandex.ru"
-      //         value={currentUser.email}
-      //         required
-      //       />
-      //       <span className="profile__error"></span>
-      //     </label>
-      //     <span className="profile__error profile__error_about-request"></span>
-      //     <button className="profile__submit-button" type="submit">Редактировать</button>
-      //   </form>
-      // </section>
     )
   }
 }

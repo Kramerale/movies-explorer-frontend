@@ -5,9 +5,9 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import moviesApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
 
-function Movies () {
+function Movies ({ movies }) {
   const [searchRequest, setSearchRequest] = useState('');
-  const [movies, setMovies] = useState([]);
+  // const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [isTumblerActive, setTumblerActive] = useState(false);
@@ -21,78 +21,86 @@ function Movies () {
   };
 
   // Функция для загрузки данных из localStorage
-  function loadFromLocalStorage () {
-    const storedMovies = localStorage.getItem('movies');
-    const storedSearchRequest = localStorage.getItem('searchRequest');
-    const storedIsTumblerActive = localStorage.getItem('isTumblerActive');
+  // function loadFromLocalStorage () {
+  //   const storedMovies = localStorage.getItem('movies');
+  //   const storedSearchRequest = localStorage.getItem('searchRequest');
+  //   const storedIsTumblerActive = localStorage.getItem('isTumblerActive');
 
-    if (storedMovies) {
-      setMovies(JSON.parse(storedMovies));
-    }
+  //   if (storedMovies) {
+  //     setMovies(JSON.parse(storedMovies));
+  //   }
 
-    if (storedSearchRequest) {
-      setSearchRequest(storedSearchRequest);
-    }
+  //   if (storedSearchRequest) {
+  //     setSearchRequest(storedSearchRequest);
+  //   }
 
-    if (storedIsTumblerActive) {
-      setTumblerActive(JSON.parse(storedIsTumblerActive));
-    }
-  };
+  //   if (storedIsTumblerActive) {
+  //     setTumblerActive(JSON.parse(storedIsTumblerActive));
+  //   }
+  // };
 
-  useEffect(() => {
-    loadFromLocalStorage(); // Загрузить данные из localStorage при монтировании компонента
-  }, []);
+  // useEffect(() => {
+  //   saveToLocalStorage(); // Сохранить данные в localStorage при изменении movies, searchRequest или isTumblerActive
+  // }, [movies, searchRequest, isTumblerActive]);
 
-  useEffect(() => {
-    if (movies.length > 0) {
-      handleSearchSubmit();
-    }
-  }, [isTumblerActive]);
+  // useEffect(() => {
+  //   loadFromLocalStorage(); // Загрузить данные из localStorage при монтировании компонента
+  // }, []);
 
-  useEffect(() => {
-    saveToLocalStorage(); // Сохранить данные в localStorage при изменении movies, searchRequest или isTumblerActive
-  }, [movies, searchRequest, isTumblerActive]);
+  // useEffect(() => {
+  //   if (movies.length > 0) {
+  //     handleSearchSubmit();
+  //   }
+  // }, [isTumblerActive]);
 
   function handleTumbler () {
     setTumblerActive (prev => !prev);
+    saveToLocalStorage();
   };
 
   function handleLike () {
     setLiked (prev => !prev);
   }
 
-  function handleSearchSubmit () {
-    if (!searchRequest) {
-      setErrorText("Введите текст запроса в форму поиска фильмов");
-      return;
-    }
+  // function handleSearchSubmit () {
+  //   if (!searchRequest) {
+  //     setErrorText("Введите текст запроса в форму поиска фильмов");
+  //     return;
+  //   }
 
-    setErrorText("");
-    setIsLoading(true);
+  //   setErrorText("");
+  //   setIsLoading(true);
 
-    moviesApi.getAllMovies()
-    .then(data => {
-      const filteredData = data.filter(item =>
-        item.nameRU.toLowerCase().includes(searchRequest.toLowerCase()) ||
-        item.nameEN.toLowerCase().includes(searchRequest.toLowerCase())
-        );
+  //   moviesApi.getAllMovies()
+  //   .then(data => {
+  //     const filteredData = data.filter(item =>
+  //       item.nameRU.toLowerCase().includes(searchRequest.toLowerCase()) ||
+  //       item.nameEN.toLowerCase().includes(searchRequest.toLowerCase())
+  //       );
 
-      const filteredDataByTumbler = isTumblerActive ?
-      filteredData.filter(movie => movie.duration < 40)
-      : filteredData;
+  //     const filteredDataByTumbler = isTumblerActive ?
+  //     filteredData.filter(movie => movie.duration < 40)
+  //     : filteredData;
 
-      if (filteredDataByTumbler.length === 0) {
-        setErrorText("Ничего не найдено");
-      } else {
-        setMovies(filteredDataByTumbler);
-        setIsLoading(false);
-      }
-    })
-    .catch(err => {
-      setErrorText("Во&nbsp;время запроса произошла ошибка. Возможно, проблема с&nbsp;соединением или сервер недоступен. Подождите немного и&nbsp;попробуйте ещё раз");
-      console.log(err);
-    });
-  };
+  //     if (filteredDataByTumbler.length === 0) {
+  //       setErrorText("Ничего не найдено");
+  //     } else {
+  //       setMovies(filteredDataByTumbler);
+  //       // setIsLoading(false);
+  //       saveToLocalStorage();
+  //     }
+  //   })
+  //   .catch(err => {
+  //     setErrorText("Во&nbsp;время запроса произошла ошибка. Возможно, проблема с&nbsp;соединением или сервер недоступен. Подождите немного и&nbsp;попробуйте ещё раз");
+  //     localStorage.removeItem("isTumblerActive");
+  //     localStorage.removeItem("searchRequest");
+  //     localStorage.removeItem("movies");
+  //     console.log(err);
+  //   })
+  //   .finally(() => {
+  //     setIsLoading(false);
+  //   })
+  // };
 
   //function handleMovieLike
   //function handleMovieDeleteLike
@@ -102,7 +110,7 @@ function Movies () {
       <SearchForm
         placeholder="Фильм"
         handleChange={e => setSearchRequest(e.target.value)}
-        handleSubmit={handleSearchSubmit}
+        // handleSubmit={handleSearchSubmit}
         tumblerState={isTumblerActive}
         tumblerChange={handleTumbler}
       />

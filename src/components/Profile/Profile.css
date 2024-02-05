@@ -97,6 +97,10 @@
   margin-bottom: 20px;
 }
 
+.profile__error-text_about-request-success {
+  color: #2BE080;
+}
+
 .profile__edit-button {
   padding: 0;
   margin: 0 0 16px;

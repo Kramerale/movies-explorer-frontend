@@ -1,4 +1,5 @@
 import React from 'react';
+import './InfoPopup.css';
 
 function InfoPopup ({ isOpen, ariaLabel, onClose, image, message }) {
   return (

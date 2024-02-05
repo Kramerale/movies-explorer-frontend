@@ -4,9 +4,9 @@ import { Link, useLocation } from 'react-router-dom';
 // import cardImage from '../../images/card-img.jpg';
 
 function MoviesCard ({ movie, likeState, likeChange }) {
-  const path = useLocation();
+  const {pathname} = useLocation();
 
-  function changeTimeFormat (time) {
+  function changeTimeFormat (time) { //убрать в utils
     if (time < 60) {
       return `${time}м`;
     }
@@ -21,7 +21,7 @@ function MoviesCard ({ movie, likeState, likeChange }) {
       <div className="card__description">
         <h3 className="card__title">{movie.nameRU}</h3>
         <button
-          className={`card__button ${path === '/saved-movies' ?
+          className={`card__button ${pathname === '/saved-movies' ?
             'card__button_delete'
             : likeState ? 'card__button_like-active' : 'card__button_like-inactive'
           }`}

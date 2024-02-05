@@ -27,7 +27,7 @@
 
 .popup__close-button {
   cursor: pointer;
-  background-image: url(../../../images/close-icon.svg);
+  background-image: url(../../images/close-icon.svg);
   background-color: transparent;
   background-repeat: no-repeat;
   background-size: contain;
