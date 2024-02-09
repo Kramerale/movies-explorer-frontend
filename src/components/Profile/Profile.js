@@ -5,11 +5,17 @@ import './Profile.css';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 import {useFormWithValidation} from '../../hooks/useFormWithValidation';
 
-function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage }) {
+function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOffErr }) {
   const [isEditButtonOn, setEditButtonOn] = useState(false);
   const [formChanged, setFormChanged] = useState();
 
   const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
+
+  useEffect(() => {
+    return () => {
+      turnOffErr('');
+    }
+  }, [])
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -60,10 +66,10 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage }) {
               name="name"
               type="text"
               placeholder="Имя"
-              defaultValue={currentUser.name}
+              defaultValue={currentUser.name} //возможно через оператор или || добавить пустую строчку
               value={values.name}
               onChange={handleChange}
-              // pattern='/^[a-zA-Zа-яА-ЯёЁ\s\-]+$/'
+              pattern='^[a-zA-Zа-яА-ЯёЁ\s\-]+$'
               required
             />
             <div className="profile__message-container"><span className="profile__error-text">{errors.name}</span></div>
@@ -75,7 +81,7 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage }) {
               name="email"
               type="email"
               placeholder="pochta@yandex.ru"
-              defaultValue={currentUser.email}
+              defaultValue={currentUser.email} //возможно через оператор или || добавить пустую строчку
               value={values.email}
               onChange={handleChange}
               pattern='/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|\(".+"\))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
@@ -84,7 +90,7 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage }) {
             <div className="profile__message-container"><span className="profile__error-text">{errors.email}</span></div>
           </label>
           <div className="profile__message-container">
-            {errMessage?
+            {errMessage ?
               <span className="profile__error-text profile__error-text_about-request">{errMessage}</span>
               : <span className="profile__error-text profile__error-text_about-request-success">{infoMessage}</span>
             }

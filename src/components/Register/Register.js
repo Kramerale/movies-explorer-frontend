@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {useFormWithValidation} from '../../hooks/useFormWithValidation';
 import './Register.css';
 import logo from '../../images/logo.svg';
 
-function Register ({ handleRegisterSubmit, errMessage }) {
+function Register ({ handleRegisterSubmit, errMessage, turnOffErr }) {
+  useEffect(() => {
+    return () => {
+      turnOffErr('');
+    }
+  }, [])
 
   const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
 
@@ -29,7 +34,7 @@ function Register ({ handleRegisterSubmit, errMessage }) {
             type="text"
             placeholder="Имя"
             onChange={handleChange}
-            pattern='/^[a-zA-Zа-яА-ЯёЁ\s\-]+$/'
+            pattern='^[a-zA-Zа-яА-ЯёЁ\s\-]+$'
             required
           />
           <div className="register__error-container"><span className="register__error-text">{errors.name}</span></div>
@@ -42,7 +47,7 @@ function Register ({ handleRegisterSubmit, errMessage }) {
             type="email"
             placeholder="pochta@yandex.ru"
             onChange={handleChange}
-            pattern='/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+            pattern='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
             required
           />
           <div className="register__error-container"><span className="register__error-text">{errors.email}</span></div>

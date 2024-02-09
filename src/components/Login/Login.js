@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import {useFormWithValidation} from '../../hooks/useFormWithValidation';
 import logo from '../../images/logo.svg';
 
-function Login ({ handleLoginSubmit, errMessage }) {
+function Login ({ handleLoginSubmit, errMessage, turnOffErr }) {
   const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation();
+
+  useEffect(() => {
+    return () => {
+      turnOffErr('');
+    }
+  }, [])
 
   function handleSubmit (e) {
     e.preventDefault();
@@ -28,7 +34,7 @@ function Login ({ handleLoginSubmit, errMessage }) {
             type="email"
             placeholder="pochta@yandex.ru"
             onChange={handleChange}
-            pattern='/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+            pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
             required
           />
           <div className="login__error-container"><span className="login__error-text">{errors.email}</span></div>

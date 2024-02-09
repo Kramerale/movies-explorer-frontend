@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import mainApi from '../../utils/MainApi';
-import moviesApi from '../../utils/MoviesApi';
 import './App.css';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -20,7 +19,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
-  const [movies, setMovies] = useState([]);
+  // const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
 
   const navigate = useNavigate();
@@ -33,8 +32,6 @@ function App() {
         if (data) {
           setLoggedIn(true);
           navigate('/');
-          console.log(data);
-          console.log(isLoggedIn);
         } else {
           setLoggedIn(false);
         }
@@ -46,15 +43,15 @@ function App() {
     }
   }, [])
 
-  useEffect(() => {
-    moviesApi.getAllMovies()
-    .then(data => {
-      setMovies(data);
-    })
-    .catch(err => {
-      setErrMessage(err.message);
-    })
-  }, [isLoggedIn])
+  // useEffect(() => {
+  //   moviesApi.getAllMovies()
+  //   .then(data => {
+  //     setMovies(data);
+  //   })
+  //   .catch(err => {
+  //     setErrMessage(err.message);
+  //   })
+  // }, [isLoggedIn])
 
   useEffect(() => {
     mainApi.getUserMovies()
@@ -69,13 +66,15 @@ function App() {
   function handleRegisterSubmit (name, email, password) {
     mainApi.register(name, email, password)
     .then(() => {
-      navigate('/signin');
+      handleLoginSubmit(email, password);
+    })
+    .then(() => {
+      navigate('/movies');
     })
     .catch(err => {
       setErrMessage(err.message);
       navigate('/signup');
     })
-    // .finally(handleInfoPopup)
   }
 
   function handleLoginSubmit (email, password) {
@@ -83,13 +82,12 @@ function App() {
     .then((data) => {
       localStorage.setItem("jwt", data.token);
       setLoggedIn(true);
-      navigate('/');
+      navigate('/movies');
     })
     .catch(err => {
       setErrMessage(err.message);
       navigate('/signin');
     })
-    // .finally(() => setErrMessage(''));
   }
 
   useEffect(() => {
@@ -112,15 +110,11 @@ function App() {
     .catch(err => {
       setErrMessage(err.message);
     })
-    // .finally(() => {
-    //   setInfoMessage('');
-    //   setErrMessage('');
-    // });
   }
 
   function signOut () {
     localStorage.removeItem("jwt");
-    localStorage.removeItem("isTumblerActive");
+    localStorage.removeItem("isTumblerOn");
     localStorage.removeItem("searchRequest");
     localStorage.removeItem("movies");
     setCurrentUser({});
@@ -151,7 +145,9 @@ function App() {
             <ProtectedRoute
               element={Movies}
               isLoggedIn={isLoggedIn}
-              movies={movies}
+              // movies={movies}
+              savedMovies={savedMovies}
+              savedMoviesChange={setSavedMovies}
             />
             <Footer />
           </>
@@ -167,10 +163,11 @@ function App() {
               element={SavedMovies}
               isLoggedIn={isLoggedIn}
               savedMovies={savedMovies}
+              savedMoviesChange={setSavedMovies}
             />
             <Footer />
           </>
-        } />
+        }/>
 
         <Route path="/profile" element={
           <>
@@ -185,6 +182,7 @@ function App() {
               errMessage={errMessage}
               infoMessage={infoMessage}
               handleEditUserInfo={updateUserInfo}
+              turnOffErr={setErrMessage}
             />
           </>
         } />
@@ -193,6 +191,7 @@ function App() {
           <Login
             handleLoginSubmit={handleLoginSubmit}
             errMessage={errMessage}
+            turnOffErr={setErrMessage}
           />
         } />
 
@@ -200,6 +199,7 @@ function App() {
           <Register
             handleRegisterSubmit={handleRegisterSubmit}
             errMessage={errMessage}
+            turnOffErr={setErrMessage}
           />
         } />
 
