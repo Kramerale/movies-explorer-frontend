@@ -129,6 +129,7 @@ function Movies ({savedMovies, savedMoviesChange}) {
       mainApi.deleteUserMovie(movie.id)
       .then(() => {
         savedMoviesChange(movies => movies.filter(m => m.id !== movie.movieId));
+        // savedMoviesChange(savedMovies => [...savedMovies].filter(m => m.movieId !== movie.id)); //копать в эту сторону, в строчку выше приходит объект со всеми фильмами, а не с сохраненными
       })
       .catch(console.error)
     } else {
