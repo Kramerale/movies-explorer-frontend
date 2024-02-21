@@ -126,10 +126,9 @@ function Movies ({savedMovies, savedMoviesChange}) {
 
   function handleMovieLike (movie, isLiked) {
     if (isLiked) {
-      mainApi.deleteUserMovie(movie._id)
+      mainApi.deleteUserMovie(movie.id)
       .then(() => {
-        savedMoviesChange(movies => movies.filter(m => m._id !== movie._id));
-        // savedMoviesChange(movies => movies.filter(m => m._id !== movie.id));
+        savedMoviesChange(movies => movies.filter(m => m.id !== movie.movieId));
       })
       .catch(console.error)
     } else {
