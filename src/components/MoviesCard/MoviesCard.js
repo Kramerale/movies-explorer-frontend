@@ -6,7 +6,6 @@ function MoviesCard ({ movie, likeState, likeChange, onSavedMovieDelete }) {
   const {pathname} = useLocation();
   const [like, setLike] = useState(false);
 
-
   function changeTimeFormat (time) {
     if (time < 60) {
       return `${time}м`;
@@ -21,7 +20,6 @@ function MoviesCard ({ movie, likeState, likeChange, onSavedMovieDelete }) {
   function handleLikeClick (e) {
     console.log(like);
     setLike(!like);
-    // setLike(prev => !prev);
     console.log(like);
     likeChange(movie, like);
   }

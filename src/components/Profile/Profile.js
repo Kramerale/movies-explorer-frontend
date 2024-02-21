@@ -66,8 +66,8 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOf
               name="name"
               type="text"
               placeholder="Имя"
-              defaultValue={currentUser.name} //возможно через оператор или || добавить пустую строчку
-              value={values.name}
+              //defaultValue={currentUser.name}
+              value={values.name || currentUser.name} // currentUser перенесла сюда чтобы пофиксить ошибку контроллируемого инпута
               onChange={handleChange}
               pattern='^[a-zA-Zа-яА-ЯёЁ\s\-]+$'
               required
@@ -81,8 +81,8 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOf
               name="email"
               type="email"
               placeholder="pochta@yandex.ru"
-              defaultValue={currentUser.email} //возможно через оператор или || добавить пустую строчку
-              value={values.email}
+              //defaultValue={currentUser.email}
+              value={values.email || currentUser.email} // currentUser перенесла сюда чтобы пофиксить ошибку контроллируемого инпута
               onChange={handleChange}
               pattern='/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|\(".+"\))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
               required

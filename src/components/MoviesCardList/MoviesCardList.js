@@ -1,49 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import Preloader from '../Preloader/Preloader';
-import { useLocation } from 'react-router-dom';
 
-function MoviesCardList ({ movies, isLoading, likeState, likeChange, onSavedMovieDelete}) {
-  const { pathname } = useLocation();
-
-  const [paginatedMovies, setPaginatedMovies] = useState([]);
-  const [countMore, setCountMore] = useState(0);
-
-  function handleViewCards(e) {
-    const screenWidth = window.innerWidth;
-
-    if (screenWidth >= 1280 || screenWidth <= 1140) {
-      setPaginatedMovies(movies.slice(0, 12 + countMore));
-    }
-
-    if (screenWidth <= 768) {
-      setPaginatedMovies(movies.slice(0, 8 + countMore));
-    }
-
-    if (screenWidth <= 480) {
-      setPaginatedMovies(movies.slice(0, 5 + countMore));
-    }
-  }
-
-  useEffect(() => {
-    handleViewCards(window.innerWidth);
-    window.addEventListener('resize', handleViewCards);
-
-    return () => {
-      window.removeEventListener('resize', handleViewCards);
-    }
-  }, [movies])
-
-  function handleMore() {
-    const additionalCards = window.innerWidth >= 1280 ? 3 : 2;
-    setCountMore(countMore + additionalCards);
-    handleViewCards();
-  }
-
-  const showButtonMore = useMemo(() => {
-    return pathname !== '/saved-movies' && movies.length > paginatedMovies.length;
-  }, [movies.length, paginatedMovies, pathname])
+function MoviesCardList ({ movies, isLoading, likeState, likeChange, onSavedMovieDelete, handleMore, showButtonMore}) {
 
   return (
     <section className="movies-cards">
@@ -53,7 +13,7 @@ function MoviesCardList ({ movies, isLoading, likeState, likeChange, onSavedMovi
         ) : (
         <>
         <ul className="movies-cards__list">
-          {paginatedMovies.map(movie =>
+          {movies.map(movie =>
             <MoviesCard
               key={movie.id || movie.movieId}
               movie={movie}

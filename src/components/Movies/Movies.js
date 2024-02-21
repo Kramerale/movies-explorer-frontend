@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
@@ -12,6 +13,45 @@ function Movies ({savedMovies, savedMoviesChange}) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState('');
   // const [isLiked, setLiked] = useState(false);
+  const [paginatedMovies, setPaginatedMovies] = useState([]);
+  const [countMore, setCountMore] = useState(0);
+
+  const { pathname } = useLocation();
+
+  function handleViewCards(e) {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth >= 1280 || screenWidth <= 1140) {
+      setPaginatedMovies(movies.slice(0, 12 + countMore));
+    }
+
+    if (screenWidth <= 768) {
+      setPaginatedMovies(movies.slice(0, 8 + countMore));
+    }
+
+    if (screenWidth <= 480) {
+      setPaginatedMovies(movies.slice(0, 5 + countMore));
+    }
+  }
+
+  useEffect(() => {
+    handleViewCards(window.innerWidth);
+    window.addEventListener('resize', handleViewCards);
+
+    return () => {
+      window.removeEventListener('resize', handleViewCards);
+    }
+  }, [movies])
+
+  function handleMore() {
+    const additionalCards = window.innerWidth >= 1280 ? 3 : 2;
+    setCountMore(countMore + additionalCards);
+    handleViewCards();
+  }
+
+  const showButtonMore = useMemo(() => {
+    return pathname !== '/saved-movies' && movies.length > paginatedMovies.length;
+  }, [movies.length, paginatedMovies, pathname]);
 
   useEffect(() => {
     loadFromLocalStorage(); // Загрузить данные из localStorage при монтировании компонента
@@ -43,7 +83,6 @@ function Movies ({savedMovies, savedMoviesChange}) {
   };
 
   function handleSearchSubmit () {
-    console.log('I am from movies');
     if (!searchRequest) {
       setErrorText("Введите текст запроса в форму поиска фильмов");
       return;
@@ -74,8 +113,8 @@ function Movies ({savedMovies, savedMoviesChange}) {
       }
     })
     .catch(err => {
-      setErrorText("Во&nbsp;время запроса произошла ошибка. Возможно, проблема с&nbsp;соединением или сервер недоступен. Подождите немного и&nbsp;попробуйте ещё раз");
-      localStorage.removeItem("isTumblerOn"); //new
+      setErrorText("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+      localStorage.removeItem("isTumblerOn");
       localStorage.removeItem("searchRequest");
       localStorage.removeItem("movies");
       console.log(err);
@@ -85,17 +124,15 @@ function Movies ({savedMovies, savedMoviesChange}) {
     })
   };
 
-  // function saveLike () {
-  //   Promise.all([moviesApi.getAllMovies(), mainApi.getUserMovies()])
-  //   .then(res => {
-  //     const [allMovies, savedMovies] = res;
-
-  //   })
-  // }
-
   function handleMovieLike (movie, isLiked) {
-    // console.log(isLiked);
     if (isLiked) {
+      mainApi.deleteUserMovie(movie._id)
+      .then(() => {
+        savedMoviesChange(movies => movies.filter(m => m._id !== movie._id));
+        // savedMoviesChange(movies => movies.filter(m => m._id !== movie.id));
+      })
+      .catch(console.error)
+    } else {
       mainApi.createMovie({
         country: movie.country,
         director: movie.director,
@@ -105,22 +142,12 @@ function Movies ({savedMovies, savedMoviesChange}) {
         image: 'https://api.nomoreparties.co' + movie.image.url,
         trailerLink: movie.trailerLink,
         thumbnail: `https://api.nomoreparties.co${movie.image.url}`,
-        // owner: currentUser._id,
         movieId: movie.id,
         nameRU: movie.nameRU,
         nameEN: movie.nameEN
       })
       .then(newMovie => {
-        console.log(newMovie)
         savedMoviesChange([newMovie, ...savedMovies]);
-      })
-      .catch(console.error)
-    } else {
-      debugger;
-      mainApi.deleteUserMovie(movie._id)
-      .then(() => {
-        savedMoviesChange(movies => movies.filter(m => m._id !== movie._id));
-        // savedMoviesChange(movies => movies.filter(m => m._id !== movie.id));
       })
       .catch(console.error)
     }
@@ -130,20 +157,23 @@ function Movies ({savedMovies, savedMoviesChange}) {
     <section className="movies">
       <SearchForm
         placeholder="Фильм"
-        handleSearchRequestChange={e => setSearchRequest(e.target.value)}
-        handleTumbler={e => setIsTumblerOn(e.target.checked)}
+        searchValue={searchRequest}
+        onSearchReqChange={e => setSearchRequest(e.target.value)}
         tumblerState={isTumblerOn}
+        onTumblerChange={e => setIsTumblerOn(e.target.checked)}
         handleSubmit={handleSearchSubmit}
-        tumblerChange={handleSearchSubmit}
+        //tumblerChange={handleSearchSubmit} //он вообще нужен???
       />
       {errorText ?
         <div className='movies__error-text'>{errorText}</div>
         :
         <MoviesCardList
-          movies={movies}
+          movies={paginatedMovies}
           isLoading={isLoading}
           // likeState={isLiked}
           likeChange={handleMovieLike}
+          handleMore={handleMore}
+          showButtonMore={showButtonMore}
       />
       }
     </section>

@@ -6,10 +6,25 @@ import mainApi from '../../utils/MainApi';
 
 function SavedMovies () {
   const [savedMovies, setSavedMovies] = useState([]);
+  const [sortedSavedMovies, setSortedSavedMovies] = useState([]);
   const [searchRequest, setSearchRequest] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [isTumblerOn, setIsTumblerOn] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    mainApi.getUserMovies()
+    .then(data => {
+      setSavedMovies(data);
+    })
+    .catch((err) => {
+      setErrorText("Ничего не найдено");
+    })
+    .finally(() => {
+      setIsLoading(false);
+    })
+  }, [])
 
   useEffect(() => {
     if (savedMovies.length > 0) {
@@ -20,31 +35,22 @@ function SavedMovies () {
   function handleSearchSubmit () {
     setIsLoading(true);
 
-    mainApi.getUserMovies()
-    .then(data => {
-      const filteredData = data.filter(item =>
-        item.nameRU.toLowerCase().includes(searchRequest.toLowerCase()) ||
-        item.nameEN.toLowerCase().includes(searchRequest.toLowerCase())
-        );
+    const filteredData = savedMovies.filter(movie =>
+      movie.nameRU.toLowerCase().includes(searchRequest.toLowerCase()) ||
+      movie.nameEN.toLowerCase().includes(searchRequest.toLowerCase())
+      );
 
-      const filteredDataByTumbler = isTumblerOn ?
-      filteredData.filter(movie => movie.duration < 40)
-      : filteredData;
+    const filteredDataByTumbler = isTumblerOn ?
+    filteredData.filter(movie => movie.duration < 40)
+    : filteredData;
 
-
-      if (filteredDataByTumbler.length === 0) {
-        setErrorText("Ничего не найдено");
-      } else {
-        setSavedMovies(filteredDataByTumbler);
-      }
-    })
-    .catch(err => {
-      setErrorText("Во&nbsp;время запроса произошла ошибка. Возможно, проблема с&nbsp;соединением или сервер недоступен. Подождите немного и&nbsp;попробуйте ещё раз");
-      console.log(err);
-    })
-    .finally(() => {
+    if (filteredDataByTumbler.length === 0) {
+      setErrorText("Ничего не найдено");
       setIsLoading(false);
-    })
+    } else {
+      setSortedSavedMovies(filteredDataByTumbler);
+      setIsLoading(false);
+    }
   };
 
   function handleDeleteMovie (movie) {
@@ -59,17 +65,17 @@ function SavedMovies () {
     <section className="saved-movies">
       <SearchForm
         placeholder='Фильм'
-        handleChange={e => setSearchRequest(e.target.value)}
-        handleTumbler={e => setIsTumblerOn(e.target.checked)}
+        searchValue={searchRequest}
+        onSearchReqChange={e => setSearchRequest(e.target.value)}
         tumblerState={isTumblerOn}
+        onTumblerChange={e => setIsTumblerOn(e.target.checked)}
         handleSubmit={handleSearchSubmit}
-        tumblerChange={handleSearchSubmit}
       />
       {errorText ?
         <div className='movies__error-text'>{errorText}</div>
         :
         <MoviesCardList
-          movies={savedMovies}
+          movies={sortedSavedMovies.length > 0 ? sortedSavedMovies : savedMovies}
           isLoading={isLoading}
           onSavedMovieDelete={handleDeleteMovie}
         />
