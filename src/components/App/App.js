@@ -3,6 +3,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import mainApi from '../../utils/MainApi';
+import moviesApi from '../../utils/MoviesApi';
 import './App.css';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -19,7 +20,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
-  // const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
 
   const navigate = useNavigate();
@@ -43,24 +44,28 @@ function App() {
     }
   }, [])
 
-  // useEffect(() => {
-  //   moviesApi.getAllMovies()
-  //   .then(data => {
-  //     setMovies(data);
-  //   })
-  //   .catch(err => {
-  //     setErrMessage(err.message);
-  //   })
-  // }, [isLoggedIn])
+  useEffect(() => {
+    if (isLoggedIn) {
+      moviesApi.getAllMovies()
+      .then(data => {
+        setMovies(data);
+      })
+      .catch(err => {
+        setErrMessage(err.message);
+      })
+    }
+  }, [isLoggedIn])
 
   useEffect(() => {
-    mainApi.getUserMovies()
-    .then(data => {
-      setSavedMovies(data);
-    })
-    .catch(err => {
-      setErrMessage(err.message);
-    })
+    if (isLoggedIn) {
+      mainApi.getUserMovies()
+      .then(data => {
+        setSavedMovies(data);
+      })
+      .catch(err => {
+        setErrMessage(err.message);
+      })
+    }
   }, [isLoggedIn])
 
   function handleRegisterSubmit (name, email, password) {
@@ -112,6 +117,36 @@ function App() {
     })
   }
 
+  function handleLike (movie, isLiked) {
+    if (isLiked) {
+      const savedMovieIds = savedMovies.find(savedMovie => savedMovie.movieId === movie.id)._id;
+      mainApi.deleteUserMovie(savedMovieIds)
+      .then(() => {
+        const updatedSavedMoviesList = savedMovies.filter(savedMovie => savedMovie.movieId !== movie.id)
+        setSavedMovies(updatedSavedMoviesList);
+      })
+      .catch(console.error)
+    } else {
+      mainApi.createMovie({
+        country: movie.country,
+        director: movie.director,
+        duration: movie.duration,
+        year: movie.year,
+        description: movie.description,
+        image: 'https://api.nomoreparties.co' + movie.image.url,
+        trailerLink: movie.trailerLink,
+        thumbnail: `https://api.nomoreparties.co${movie.image.url}`,
+        movieId: movie.id,
+        nameRU: movie.nameRU,
+        nameEN: movie.nameEN
+      })
+      .then(newMovie => {
+        setSavedMovies([newMovie, ...savedMovies]);
+      })
+      .catch(console.error)
+    }
+  }
+
   function signOut () {
     localStorage.removeItem("jwt");
     localStorage.removeItem("isTumblerOn");
@@ -145,9 +180,9 @@ function App() {
             <ProtectedRoute
               element={Movies}
               isLoggedIn={isLoggedIn}
-              // movies={movies}
+              movies={movies}
               savedMovies={savedMovies}
-              savedMoviesChange={setSavedMovies}
+              handleLike={handleLike}
             />
             <Footer />
           </>
@@ -162,8 +197,9 @@ function App() {
             <ProtectedRoute
               element={SavedMovies}
               isLoggedIn={isLoggedIn}
+              movies={movies}
               savedMovies={savedMovies}
-              savedMoviesChange={setSavedMovies}
+              handleLike={handleLike}
             />
             <Footer />
           </>

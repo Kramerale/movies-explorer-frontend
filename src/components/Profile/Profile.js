@@ -66,8 +66,7 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOf
               name="name"
               type="text"
               placeholder="Имя"
-              //defaultValue={currentUser.name}
-              value={values.name || currentUser.name} // currentUser перенесла сюда чтобы пофиксить ошибку контроллируемого инпута
+              value={values.name || currentUser.name}
               onChange={handleChange}
               pattern='^[a-zA-Zа-яА-ЯёЁ\s\-]+$'
               required
@@ -81,10 +80,9 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOf
               name="email"
               type="email"
               placeholder="pochta@yandex.ru"
-              //defaultValue={currentUser.email}
-              value={values.email || currentUser.email} // currentUser перенесла сюда чтобы пофиксить ошибку контроллируемого инпута
+              value={values.email || currentUser.email}
               onChange={handleChange}
-              pattern='/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|\(".+"\))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
+              // pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|\(".+"\))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
               required
             />
             <div className="profile__message-container"><span className="profile__error-text">{errors.email}</span></div>

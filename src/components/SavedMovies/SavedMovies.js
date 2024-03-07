@@ -2,29 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './SavedMovies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import mainApi from '../../utils/MainApi';
 
-function SavedMovies () {
-  const [savedMovies, setSavedMovies] = useState([]);
-  const [sortedSavedMovies, setSortedSavedMovies] = useState([]);
+function SavedMovies ({movies, savedMovies, handleLike}) {
+  const [displayedMovies, setDisplayedMovies] = useState([]);
   const [searchRequest, setSearchRequest] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [isTumblerOn, setIsTumblerOn] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    mainApi.getUserMovies()
-    .then(data => {
-      setSavedMovies(data);
-    })
-    .catch((err) => {
-      setErrorText("Ничего не найдено");
-    })
-    .finally(() => {
-      setIsLoading(false);
-    })
-  }, [])
 
   useEffect(() => {
     if (savedMovies.length > 0) {
@@ -32,10 +16,14 @@ function SavedMovies () {
     }
   }, [isTumblerOn]);
 
+  useEffect(() => {
+    setDisplayedMovies(movies);
+  }, []);
+
   function handleSearchSubmit () {
     setIsLoading(true);
 
-    const filteredData = savedMovies.filter(movie =>
+    const filteredData = movies.filter(movie =>
       movie.nameRU.toLowerCase().includes(searchRequest.toLowerCase()) ||
       movie.nameEN.toLowerCase().includes(searchRequest.toLowerCase())
       );
@@ -48,18 +36,10 @@ function SavedMovies () {
       setErrorText("Ничего не найдено");
       setIsLoading(false);
     } else {
-      setSortedSavedMovies(filteredDataByTumbler);
+      setDisplayedMovies(filteredDataByTumbler);
       setIsLoading(false);
     }
   };
-
-  function handleDeleteMovie (movie) {
-    mainApi.deleteUserMovie(movie._id)
-    .then(() => {
-      setSavedMovies(movies => movies.filter(m => m.movieId !== movie.movieId));
-    })
-    .catch(console.error)
-  }
 
   return (
     <section className="saved-movies">
@@ -75,9 +55,11 @@ function SavedMovies () {
         <div className='movies__error-text'>{errorText}</div>
         :
         <MoviesCardList
-          movies={sortedSavedMovies.length > 0 ? sortedSavedMovies : savedMovies}
+          movies={displayedMovies}
+          savedMovies={savedMovies}
           isLoading={isLoading}
-          onSavedMovieDelete={handleDeleteMovie}
+          handleLike={handleLike}
+          isAllSaved={true}
         />
       }
     </section>

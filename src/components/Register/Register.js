@@ -47,7 +47,7 @@ function Register ({ handleRegisterSubmit, errMessage, turnOffErr }) {
             type="email"
             placeholder="pochta@yandex.ru"
             onChange={handleChange}
-            pattern='^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            // pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|\(".+"\))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
             required
           />
           <div className="register__error-container"><span className="register__error-text">{errors.email}</span></div>
