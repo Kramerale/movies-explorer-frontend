@@ -54,6 +54,16 @@
   background-image: url('../../images/like-button-active.svg');
 }
 
+.card__button_delete {
+  opacity: 0;
+  /* background-image: url('../../images/delete-button.svg'); */
+}
+
+.card:hover .card__button_delete {
+  opacity: 1;
+  background-image: url('../../images/delete-button.svg');
+}
+
 .card__duration {
   margin: 0;
   font-size: 11px;

@@ -41,11 +41,10 @@
 .register__label {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
 }
 
 .register__label:last-of-type {
-  margin-bottom: 69px;
+  margin-bottom: 39px;
 }
 
 .register__input-title {
@@ -69,14 +68,25 @@
   color: #EE3465;
 }
 
-.register__error {
+.register__error-container {
+  height: 30px;
+}
+
+.register__error-text {
   color: #EE3465;
   font-size: 10px;
   font-weight: 400;
   margin-top: 10px;
 }
 
-.register__form-submit {
+.register__error-text_about-request {
+  display: block;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.register__submit-button {
   padding: 13px 0 15px;
   border: none;
   border-radius: 3px;
@@ -88,8 +98,15 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-.register__form-submit:hover {
+.register__submit-button:hover {
   opacity: 0.8;
+}
+
+.register__submit-button_disabled {
+  cursor: default;
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+  pointer-events: none;
 }
 
 .register__text {
@@ -119,7 +136,6 @@
 @media (max-width: 500px) {
   .register {
     max-width: 260px;
-    width: 100%;
     padding-top: 56px;
     padding-bottom: 30px;
   }
@@ -139,10 +155,10 @@
   }
 
   .register__label:last-of-type {
-    margin-bottom: 157px;
+    margin-bottom: 127px;
   }
 
-  .register__form-submit {
+  .register__submit-button {
     padding-top: 15px;
     padding-bottom: 15px;
     font-size: 12px;
