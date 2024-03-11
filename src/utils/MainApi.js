@@ -109,8 +109,8 @@ class MainApi {
 }
 
 const mainApi = new MainApi({
-  // baseUrl: 'https://api.kramerale.diploma.nomoredomainsmonster.ru',
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'https://api.kramerale.diploma.nomoredomainsmonster.ru',
+  // baseUrl: 'http://localhost:3000',
   // headers: {
   //   authorization: '8fe60504-aa52-4743-868a-71782c18b288',
   //   'Content-Type': 'application/json'
