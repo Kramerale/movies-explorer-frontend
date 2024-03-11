@@ -55,6 +55,12 @@
 }
 
 .card__button_delete {
+  opacity: 0;
+  /* background-image: url('../../images/delete-button.svg'); */
+}
+
+.card:hover .card__button_delete {
+  opacity: 1;
   background-image: url('../../images/delete-button.svg');
 }
 

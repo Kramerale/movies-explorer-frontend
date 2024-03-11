@@ -6,22 +6,26 @@ import Preloader from '../Preloader/Preloader';
 function MoviesCardList ({ movies, savedMovies, isLoading, handleLike, isAllSaved }) {
 
   const [paginatedMovies, setPaginatedMovies] = useState([]);
-  const [countMore, setCountMore] = useState(0);
+  const [countMore, setCountMore] = useState(1);
 
   function handleViewCards(e) {
     const screenWidth = window.innerWidth;
 
+    let moviesToShow = 0;
+
     if (screenWidth >= 1280 || screenWidth <= 1140) {
-      setPaginatedMovies(movies.slice(0, 12 + countMore));
+      moviesToShow = 11 + countMore;
     }
 
     if (screenWidth <= 768) {
-      setPaginatedMovies(movies.slice(0, 8 + countMore));
+      moviesToShow = 7 + countMore;
     }
 
     if (screenWidth <= 480) {
-      setPaginatedMovies(movies.slice(0, 5 + countMore));
+      moviesToShow = 4 + countMore;
     }
+
+    setPaginatedMovies(movies.slice(0, moviesToShow));
   }
 
   useEffect(() => {
@@ -31,12 +35,11 @@ function MoviesCardList ({ movies, savedMovies, isLoading, handleLike, isAllSave
     return () => {
       window.removeEventListener('resize', handleViewCards);
     }
-  }, [movies])
+  }, [movies, countMore])
 
   function handleMore() {
     const additionalCards = window.innerWidth >= 1280 ? 3 : 2;
     setCountMore(countMore + additionalCards);
-    handleViewCards();
   }
 
   const moviesToShow = useMemo(() => {

@@ -14,31 +14,43 @@ import Login from '../Login/Login';
 import Register from '../Register/Register';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
+import InfoPopup from '../InfoPopup/InfoPopup';
+import resolve from '../../images/resolve.svg'
 
 function App() {
+  const storedLoggedValue = localStorage.getItem("isLoggedIn");
+
   const [currentUser, setCurrentUser] = useState({});
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(JSON.parse(storedLoggedValue));
+  // const [isLoading, setLoading] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
   const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = React.useState(false);
+  const [infoImage, setInfoImage] = React.useState('');
+  const [infoAriaLabel, setAriaLabel] = React.useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
+    // setLoading(true);
     if (jwt) {
       mainApi.getToken(jwt)
       .then(data => {
         if (data) {
           setLoggedIn(true);
-          navigate('/');
+          localStorage.setItem("isLoggedIn", true);
+          // navigate('/');
         } else {
           setLoggedIn(false);
+          localStorage.setItem("isLoggedIn", false);
         }
       })
       .catch(err => {
         setLoggedIn(false);
+        localStorage.setItem("isLoggedIn", false);
         console.error(err);
       })
     }
@@ -68,6 +80,14 @@ function App() {
     }
   }, [isLoggedIn])
 
+  function handleInfoPopup () {
+    setIsInfoPopupOpen(true);
+  }
+
+  function closePopup () {
+    setIsInfoPopupOpen(false);
+  }
+
   function handleRegisterSubmit (name, email, password) {
     mainApi.register(name, email, password)
     .then(() => {
@@ -87,6 +107,7 @@ function App() {
     .then((data) => {
       localStorage.setItem("jwt", data.token);
       setLoggedIn(true);
+      localStorage.setItem("isLoggedIn", true);
       navigate('/movies');
     })
     .catch(err => {
@@ -109,12 +130,15 @@ function App() {
   function updateUserInfo (name, email) {
     mainApi.editUserInfo(name, email)
     .then(newUserInfo => {
+      setInfoImage(resolve);
       setInfoMessage('Профиль успешно обновлен!');
+      setAriaLabel('Попап, информирующий о статусе изменения профиля');
       setCurrentUser(newUserInfo);
     })
     .catch(err => {
       setErrMessage(err.message);
     })
+    .finally(handleInfoPopup)
   }
 
   function handleLike (movie, isLiked) {
@@ -152,6 +176,7 @@ function App() {
     localStorage.removeItem("isTumblerOn");
     localStorage.removeItem("searchRequest");
     localStorage.removeItem("movies");
+    localStorage.removeItem("isLoggedIn");
     setCurrentUser({});
     setLoggedIn(false);
     navigate('/');
@@ -180,7 +205,7 @@ function App() {
             <ProtectedRoute
               element={Movies}
               isLoggedIn={isLoggedIn}
-              movies={movies}
+              // movies={movies}
               savedMovies={savedMovies}
               handleLike={handleLike}
             />
@@ -243,6 +268,13 @@ function App() {
           <NotFound />
         } />
       </Routes>
+      <InfoPopup
+        isOpen={isInfoPopupOpen}
+        onClose={closePopup}
+        ariaLabel={infoAriaLabel}
+        image={infoImage}
+        message={infoMessage}
+      />
     </CurrentUserContext.Provider>
   );
 }

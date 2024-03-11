@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import moviesApi from '../../utils/MoviesApi';
 
-function Movies ({ movies, savedMovies, handleLike }) {
+function Movies ({ savedMovies, handleLike }) {
   const [displayedMovies, setDisplayedMovies] = useState([]);
   const [searchRequest, setSearchRequest] = useState('');
   const [isTumblerOn, setIsTumblerOn] = useState(false);
@@ -41,7 +42,7 @@ function Movies ({ movies, savedMovies, handleLike }) {
 
   function handleSearchSubmit () {
     if (!searchRequest) {
-      setErrorText("Введите текст запроса в форму поиска фильмов");
+      setErrorText("Нужно ввести ключевое слово");
       return;
     }
 
@@ -50,25 +51,33 @@ function Movies ({ movies, savedMovies, handleLike }) {
 
     localStorage.setItem('searchRequest', searchRequest);
 
-    const filteredData = movies.filter(item =>
-      item.nameRU.toLowerCase().includes(searchRequest?.toLowerCase()) ||
-      item.nameEN.toLowerCase().includes(searchRequest?.toLowerCase())
-      );
+    moviesApi.getAllMovies()
+    .then(data => {
+      const filteredData = data.filter(item =>
+        item.nameRU.toLowerCase().includes(searchRequest?.toLowerCase()) ||
+        item.nameEN.toLowerCase().includes(searchRequest?.toLowerCase())
+        );
 
-    const filteredDataByTumbler = isTumblerOn ?
-    filteredData.filter(movie => movie.duration < 40)
-    : filteredData;
+      const filteredDataByTumbler = isTumblerOn ?
+      filteredData.filter(movie => movie.duration < 40)
+      : filteredData;
 
-    localStorage.setItem('isTumblerOn', isTumblerOn);
+      localStorage.setItem('isTumblerOn', isTumblerOn);
 
-    if (filteredDataByTumbler.length === 0) {
-      setErrorText("Ничего не найдено");
-    } else {
-      setDisplayedMovies(filteredDataByTumbler);
-      localStorage.setItem('movies', JSON.stringify(filteredDataByTumbler));
-    }
-
-    setIsLoading(false);
+      if (filteredDataByTumbler.length === 0) {
+        setErrorText("Ничего не найдено");
+      } else {
+        setDisplayedMovies(filteredDataByTumbler);
+        localStorage.setItem('movies', JSON.stringify(filteredDataByTumbler));
+      }
+    })
+    .catch(err => {
+      setIsLoading(false);
+      setErrorText("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+    })
+    .finally(() => {
+      setIsLoading(false);
+    })
   };
 
   return (

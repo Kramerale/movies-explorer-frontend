@@ -66,7 +66,8 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOf
               name="name"
               type="text"
               placeholder="Имя"
-              value={values.name || currentUser.name}
+              // value={values.name || currentUser.name}
+              value={values.name || ""}
               onChange={handleChange}
               pattern='^[a-zA-Zа-яА-ЯёЁ\s\-]+$'
               required
@@ -80,9 +81,10 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOf
               name="email"
               type="email"
               placeholder="pochta@yandex.ru"
-              value={values.email || currentUser.email}
+              // value={values.email || currentUser.email}
+              value={values.email || ""}
               onChange={handleChange}
-              // pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|\(".+"\))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+              // pattern='(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))'
               required
             />
             <div className="profile__message-container"><span className="profile__error-text">{errors.email}</span></div>
@@ -90,13 +92,13 @@ function Profile ({ signOut, handleEditUserInfo, errMessage, infoMessage, turnOf
           <div className="profile__message-container">
             {errMessage ?
               <span className="profile__error-text profile__error-text_about-request">{errMessage}</span>
-              : <span className="profile__error-text profile__error-text_about-request-success">{infoMessage}</span>
+              : ""
             }
           </div>
           <button
             className={`profile__submit-button ${isValid && formChanged ? "" : "profile__submit-button_disabled"}`}
             type="submit"
-            disabled={!isValid || !formChanged}
+            disabled={!formChanged || !isValid}
             >
               Редактировать
           </button>
